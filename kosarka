@@ -1,0 +1,98 @@
+# ACB kosarlabdaliga 2004-2005
+
+# 1. feladat: kosar2004.py
+
+# 2. feladat:
+
+class Merkozes:
+    def __init__(self, line):
+        darabol = line.split(";")
+        self.hazai = (darabol[0])
+        self.idegen = (darabol[1])
+        self.hazai_pont = int(darabol[2])
+        self.idegen_pont = int(darabol[3])
+        self.helyszin = darabol[4]
+        self.idopont = darabol[5].rstrip("\n")
+
+
+merkozesek = [] # létrehozzuk a listát, elhelyezzük benne a txt állomány adatait
+with open("eredmenyek.txt", "rt") as file:
+    lines = file.readlines()
+    for i in range(1, len(lines)): # ha nem lenne az első sorban semmi, akkor 0-val kezdődne
+        merkozesek.append(Merkozes(lines[i]))
+
+# 3. feladat megszámlálás
+
+#ilyen esetben mindig létrehozol változót és azt számoljuk meg, itt 2 változóra van szükség
+
+hazaiRM = 0     # a Real hazai meccsei
+idegenRM = 0    # a Real idegenbeli meccsei
+for meccs in merkozesek:        #meccs objektum
+    if meccs.hazai == "Real Madrid":
+        hazaiRM = hazaiRM + 1
+    elif meccs.idegen == "Real Madrid":
+        idegenRM = idegenRM + 1
+print("3. feladat: a Real Madrid: Hazai: {}, Idegen: {}".format(hazaiRM, idegenRM))
+print()
+
+# 4. feladat
+# Volt-e döntetlen mérkőzés - hazai és idegenbeli pontok száma egyenlő
+
+volte = False #logikai típusú válozó bevezetése
+for meccsek in merkozesek:
+    if meccs.hazai_pont == meccs.idegen_pont:
+        volte = True
+        break
+if volte:
+    print("4. feladat: Volt döntetlen? Igen")
+else:
+    print("4. feladat: Volt döntetlen? Nem")
+print()
+
+# 5. feladat
+
+# bejárom megint a listát és vizsgálom a hazai és az idegenbeli mezőket
+
+for meccs in merkozesek:
+    if "Barcelona" in meccs.hazai:
+        print("5. feladat: a barcelonai csapat neve: {}".format(meccs.hazai))
+        break
+    elif "Barcelona" in meccs.idegen:
+        print("5. feladat: a barcelonai csapat neve: {}".format(meccs.idegen))
+        break
+# 6. feladat
+
+print("6. feladat:") # ezt csak egyszer kell kiírni
+for meccs in merkozesek:
+    if meccs.idopont ==  "2004-11-21":            # az időpont a feltétel
+        print("\t{}-{} ({}:{})".format(
+            meccs.hazai, meccs.idegen,
+            meccs.hazai_pont, meccs.idegen_pont
+        ))
+
+# 7. feladat
+
+# három részre bontva
+
+print("7. feladat:")
+stadionNev = []
+for meccs in merkozesek:
+    if meccs.helyszin not in stadionNev:
+        stadionNev.append(meccs.helyszin)   # így a stadionnév listában mindegyik csak 1x szerepel
+
+    stadionDB = []
+    for i in range(0, len(stadionNev)):
+        db = 0
+        for meccs in merkozesek:
+            if stadionNev[i] == meccs.helyszin:
+                db = db + 1
+        stadionDB.append(db)        # hozzáadom a listához
+
+for i in range(0, len(stadionDB)):
+    if stadionDB[i] > 20:
+        print("\t{}: {}".format(stadionNev[i],
+                                stadionDB[i]
+                                ))
+
+
+
