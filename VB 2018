@@ -1,4 +1,4 @@
-# 1.-2. feladat  Kandó Tamás_vb2018.py létrehozása, + adatok beolvasása és tárolása
+# 1.-2. feladat adatok beolvasása és tárolása
 
 class Stadion:
     def __init__(self, stadion):
