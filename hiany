@@ -1,0 +1,108 @@
+# Hianyzasok
+
+# 1. feladat: Hianyzasok.py
+
+# 2. feladat:
+
+class Hianyzas:
+    def __init__(self, line):
+        darabol = line.split(";")
+        self.nev = darabol[0]           #sting
+        self.osztaly = darabol[1]       #sting, mert nem csak szam 5/B
+        self.elso_nap = int(darabol[2])                         #szam
+        self.utolso_nap = int(darabol[3])                       #szam
+        self.mulasztott_orak = int(darabol[4].rstrip("\n"))     #szam
+
+
+hianyzasok_lista = []
+with open("szeptember.txt", "rt", encoding="utf-8") as file:
+    lines = file.readlines()
+    for i in range(1, len(lines)):
+        hianyzasok_lista.append(Hianyzas(lines[i]))
+
+"""
+# Ellenőrzésképpen írassuk ki a lista tartalmát
+for i in range(len(hianyzasok_lista)):
+    print("{} {} {} {} {}".format(
+    hianyzasok_lista[i].nev,
+    hianyzasok_lista[i].osztaly,
+    hianyzasok_lista[i].elso_nap,
+    hianyzasok_lista[i].utolso_nap,
+    hianyzasok_lista[i].mulasztott_orak
+    ))
+
+print()
+
+# Ellenőrzésképpen kiírjuk másképpen
+for h in hianyzasok_lista:             #h az objektum neve
+    print("{},{},{},{},{}".format(
+        h.nev, h.osztaly, h.elso_nap, h.utolso_nap, h.mulasztott_orak
+    ))
+
+"""
+
+# 2. feladat; a diákok összesen hány órát mulasztottak ebben a hónapban?
+
+osszesen = 0    #osszeadásnál 0, szorzásnál 1 a kezdőérték
+for h in hianyzasok_lista:     # ha az összes érték, akkor mindig bejárós ciklus
+    osszesen = osszesen + h.mulasztott_orak # nincs egyéb feltétel, csak össze kell adni
+print("2. feladat")
+print("\t Az összes mulasztott órák száma: {} óra.".format(osszesen))
+print()
+
+# 3. feladat Kérjen be a felhasználótól egy napot 1 és 30 között és egy tanuló nevét!
+
+print("3. feladat")
+nap3 = int(input("\tKérem adjon meg egy napot: "))  #két változót hozunk létre, ezeket bekérjük
+nev3 = input("\tAdja meg a tanuló nevét:")  #nap3 nev3 a változóink
+print()
+#itt csak bekérés a feladat
+
+# 4. feladat Írja ki a képernyőre, hogy az előző feladatban beért tanulónak volt-e hiányzása!
+
+hianyzottE = False      #változót hozok létre
+for h in hianyzasok_lista:  #bejárjuk a listát
+    if h.nev == nev3:       #a listában megadott név megegyezik-e a bevitt névvel
+        hianyzottE = True
+        break
+print("4. feladat")
+if hianyzottE == True: #if hianyzottE:
+    print("\tA tanuló hiányzott szeptemberben")
+else:
+    print("\tA tanuló nem hiányzott szeptemberben")
+print()
+
+# 5. feladat - az adott napon kik hiányoztak?
+
+print("5. feladat: Hiányzók 2017.09.{}".format(nap3))
+hDB = 0     # változó megadása
+for h in hianyzasok_lista:  #bejárjuk a listát
+    if nap3 >= h.elso_nap and nap3 <= h.utolso_nap:
+        print("\t {} {}".format(h.nev, h.osztaly))
+        hDB = hDB + 1
+if hDB == 0:
+    print("\tNem volt hiányzó a megadott napon!")
+print()
+
+# 6. feladat -
+
+osztalyNev = []
+for h in hianyzasok_lista:
+    if h.osztaly not in osztalyNev:
+        osztalyNev.append(h.osztaly)
+osztalyNev.sort()    #ezzel rendezzük sorba
+#print(osztalyNev)
+
+osztalyMulasztas = [] #lista létrehozása
+for i in range(len(osztalyNev)):
+    osszM = 0 # összes mulasztás
+    for h in hianyzasok_lista:
+        if osztalyNev[i] == h.osztaly:
+            osszM = osszM + h.mulasztott_orak
+    osztalyMulasztas.append(osszM)
+
+with open("osszesites.txt", "wt", encoding="utf-8") as file:
+    for i in range(len(osztalyNev)): #len(osztalyMulasztas)
+        file.write("{} {}\n".format(osztalyNev[i],
+                                    osztalyMulasztas[i]))
+
