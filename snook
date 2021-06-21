@@ -1,0 +1,61 @@
+# 1. feladat Snooker néven elmenteni
+
+# 2. feladat adatok beolvasása snooker.txt fájlból
+
+class Snooker:
+    def __init__(self, jatekos):
+        darabol = jatekos.split(";")
+        self.vrhelyezes = int(darabol[0])
+        self.nev = darabol[1]
+        self.orszag = darabol[2]
+        self.penznyeremeny = int(darabol[3].rstrip("\n"))
+
+snookeresek = []
+with open("snooker.txt", "rt") as file:
+    lines = file.readlines()
+    for i in range(1, len(lines)):
+        snookeresek.append(Snooker(lines[i]))
+
+# 3. feladat hány versenyző szerepel a világranglistán
+
+print("3. feladat: A világranglistán {} versenyző szerepel".format(len(snookeresek)))
+
+# 4. Átlagosan mennyi pénzt nyertek a versenyzők
+
+atlag = 0
+for r in snookeresek:     # ha az összes érték, akkor mindig bejárós ciklus
+    atlag = atlag + r.penznyeremeny # nincs egyéb feltétel, csak össze kell adni
+print("4. feladat: A versenyzők átlagosan {:.2f} fontot kerestek". format(atlag / len(snookeresek)))
+
+# 5. a legjobban kereső kínai játékos adatai
+
+max_kinai = 0
+
+# megkeressük a legkisebbet, minden adaton végig kell menni
+for i in range(1, len(snookeresek)):
+    if snookeresek[i].orszag == "Kína":
+        # Kínai és a legtöbbet kereste
+        if snookeresek[i].penznyeremeny > snookeresek[max_kinai].penznyeremeny: # kiválasztja a legtöbbet keresőt
+            max_kinai = i
+
+print("5. feladat: A legjobban kereső kínai versenyző:")
+print("\t Helyezes: {} ".format(snookeresek[max_kinai].vrhelyezes))
+print("\t Név: {}".format(snookeresek[max_kinai].nev))
+print("\t Ország: {}".format(snookeresek[max_kinai].orszag))
+print("\t Nyeremény összege: {} Ft".format(snookeresek[max_kinai].penznyeremeny*380))
+
+
+# 6. feladat - Van-e a világranglistán norvég játékos
+# két kimenetel lehet vagy igen, vagy nem?
+
+for r in snookeresek:
+    if r.orszag == "Norvégia":
+        print("6. fealadat: A versenyzők között van norvég versenyző")
+        break
+else:
+    print("6. fealadat: A versenyzők között nincs norvég versenyző")
+
+
+
+
+
