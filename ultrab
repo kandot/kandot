@@ -1,0 +1,90 @@
+# 2.feladat
+
+class Versenyzo:
+    def __init__(self, line): # feldaraboljuk a soron belüli infót
+        darabol = line.split(";") #;-vel választ el
+        self.nev = darabol[0] # sima string
+        self.rajtszam = int(darabol[1]) # egésszé alakít
+        self.kategória = darabol[2] # férfi vagy nő, nem kell konvertálni
+        self.ido = darabol[3] # string?
+        self.befejezesSzazalek = int(darabol[4].rstrip("\n")) # sortörést levágom, de ez csak stringre hívható meg /rstrip/
+
+versenyzok = []
+with open("ub2017egyeni.txt", "rt", encoding="utf-8") as file: # elkezdem a beolvasást, az UTF nem kötelező
+   lines = file.readlines() #sorok olvasása
+   for i in range(1, len(lines)): # azért 1-től, mert így a fejlécet kihagyja
+       versenyzok.append(Versenyzo(lines[i])) # elhelyeztük a listába a versenyzőket
+
+# 3. Feladat
+
+print("3. feladat: Egyéni indulók: {} fő".format(len(versenyzok)))
+
+# 4. feladat
+
+celbaertNok = 0
+for verseny in versenyzok:
+    if verseny.befejezesSzazalek == 100 and verseny.kategória == "Noi":
+        celbaertNok += 1
+print("4. feladat: Célbaért női sportolók száma: {} fő".format(celbaertNok))
+
+# 5. feladat
+sportoloNev =input("5. feladat: Kérem a sportoló nevét: ")
+
+k = 0
+while k < len(versenyzok) and versenyzok[k].nev != sportoloNev: #amíg kisebb a k mint a versenyzők lista hossza és nem talál név egyezést, addig megy a ciklus
+    k += 1
+vane = k < len(versenyzok) # itt tároljuk, hogy meg van-e a név, logikai változó
+# ebben a változóban van benne, indult-e a versenyen
+if vane: # Ezt meg kell néznem, nekem nem tiszta
+    if versenyzok[k].befejezesSzazalek == 100:
+        print("\tIndult egyéniben a sportoló? Igen", "\n", "\tTeljesítette a távot? Igen")
+    else:
+        print("\tIndult egyéniben a sportoló? Igen", "\n", "\tTeljesítette a távot? Nem")
+else:
+    print("\tIndult egyéniben a sportoló? Nem") # bekezdés létrehozása a kiírásban a \t-vel
+
+# 6. feladat
+
+def IdoOraban(ora, perc, mp): # függvényt hozunk létre óra, perc, másodperc paraméterekkel
+    return ora + (perc / 60.0) + (mp / 3600.0) # a .0-t azért teszi ki, hogy valós értéket kapjunk
+
+# 7. feladat
+
+ferfiIdoosszeg = 0
+ferfiIdoDb = 0
+for versenyzo in versenyzok:
+    if versenyzo.kategória == "Ferfi" and versenyzo.befejezesSzazalek == 100:
+        ferfiIdo = versenyzo.ido.split(":") # daraboljuk az időt
+        ora = float(ferfiIdo[0]) # betároljuk a listából származó idő adatoakt
+        perc = float(ferfiIdo[1])
+        mp = float(ferfiIdo[2])
+        ferfiIdoosszeg += IdoOraban(ora, perc, mp)
+        ferfiIdoDb += 1
+print("7. feladat: Átlagos idő {:.12f} óra".format(ferfiIdoosszeg / ferfiIdoDb))
+# .12f tizedes jegyek számát tudjuk beállítani
+
+# 8. feladat
+
+min_ferfi = 0
+min_no = 0
+# megkeressük a legkisebbet, minden adaton végig kell menni
+for i in range(1, len(versenyzok)):
+    if versenyzok[i].kategória == "Noi" and versenyzok[i].befejezesSzazalek == 100:
+        # Női és befejezte, ezt vizsgáltuk, ha igaz, akkor
+        if versenyzok[i].ido < versenyzok[min_no].ido: # kiválasztja a minimum időt
+            min_no = i
+    elif versenyzok[i].kategória == "Ferfi" and versenyzok[i].befejezesSzazalek == 100:
+        # Férfi és befejezte, ezt vizsgáltuk, ha igaz, akkor
+        if versenyzok[i].ido < versenyzok[min_ferfi].ido: # kiválasztja a minimum időt
+            min_ferfi = i
+print("8. feladat: Verseny Győztesei")
+print("\tNők: {} ({}.) - {}".format(
+    versenyzok[min_no].nev,
+    versenyzok[min_no].rajtszam,
+    versenyzok[min_no].ido
+))
+print("\tFérfiak: {} ({}.) - {}".format(
+    versenyzok[min_ferfi].nev,
+    versenyzok[min_ferfi].rajtszam,
+    versenyzok[min_ferfi].ido
+))
