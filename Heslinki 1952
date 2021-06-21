@@ -1,0 +1,102 @@
+# Helsinki 1952
+
+# 2. feladat
+
+class verseny:
+    def __init__(self, line):
+        darabol = line.split()
+        self.helyezes = int(darabol[0])
+        self.sportolok_szama = int(darabol[1])
+        self.sportag = darabol[2]
+        self.versenyszam = darabol[3].rstrip("\n")
+
+versenyek = []
+with open("helsinki.txt", "rt") as file:
+    lines = file.readlines()
+    for i in range(0, len(lines)):
+        versenyek.append(verseny(lines[i]))
+
+# 3. feladat
+
+print("3. feladat")
+print("Pontszerző helyezések száma: {}".format(len(versenyek)))
+
+# 4. feladat
+
+aranyDb = 0
+ezustDb = 0
+bronzDb = 0
+
+for verseny in versenyek:
+    if verseny.helyezes == 1:
+        aranyDb = aranyDb + 1
+    elif verseny.helyezes == 2:
+        ezustDb = ezustDb + 1
+    elif verseny.helyezes == 3:
+        bronzDb = bronzDb + 1
+
+print("4. feladat")
+print("Arany: {}".format(aranyDb))
+print("Ezüst: {}".format(ezustDb))
+print("Bronz: {}".format(bronzDb))
+print("Összesen: {}".format(aranyDb+ezustDb+bronzDb))
+
+# 5. feladat
+
+pont = [7, 5, 4, 3, 2, 1]
+pontszam = 0
+for verseny in versenyek:
+    pontszam = pontszam + pont[verseny.helyezes-1]
+print("5. feladat")
+print("Olimpiai pontok száma {}" .format(pontszam))
+
+# 6. feladata
+
+uszasDb = 0
+tornaDb = 0
+for verseny in versenyek:
+    if verseny.helyezes < 4 and verseny.sportag == "uszas":
+        uszasDb = uszasDb + 1
+    elif verseny.helyezes < 4 and verseny.sportag == "torna":
+        tornaDb = tornaDb + 1
+print(uszasDb)
+print(tornaDb)
+print("6. feladat")
+if uszasDb > tornaDb:
+    print("Úszás sportágban szereztek több érmet")
+elif uszasDb < tornaDb:
+    print("Torna sportágban szereztek több érmet")
+else:
+    print("Egyenlő volt az érmek száma")
+
+# 7. feladat
+
+with open("helsinki2.txt", "wt", encoding="utf-8") as file:
+    for verseny in versenyek:
+        sportag_kk = verseny.sportag
+        if sportag_kk == "kajakkenu":
+            sportag_kk == "kajak-kenu"
+        file.write("{} {} {} {} {} \n".format(
+            verseny.helyezes,
+            verseny.sportolok_szama,
+            pont[verseny.helyezes-1],
+            sportag_kk,
+            verseny.versenyszam
+        ))
+
+# 8. feladat
+
+max = 0
+for i in range(1, len(versenyek)):
+    if versenyek[i].sportolok_szama > versenyek[max].sportolok_szama:
+        max = i
+
+print("8. feladat")
+print("Helyezes: {}".format(versenyek[max].helyezes))
+print("Sportág: {}".format(versenyek[max].sportag))
+print("Versenyszám: {}".format(versenyek[max].versenyszam))
+print("Sportolók száma: {}".format(versenyek[max].sportolok_szama))
+
+
+
+
