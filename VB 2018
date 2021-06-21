@@ -1,0 +1,52 @@
+# 1.-2. feladat  Kandó Tamás_vb2018.py létrehozása, + adatok beolvasása és tárolása
+
+class Stadion:
+    def __init__(self, stadion):
+        darabol = stadion.split(";")
+        self.varos = darabol[0]
+        self.nev1 = darabol[1]
+        self.nev2 = darabol[2]
+        self.ferohely = int(darabol[3].rstrip("\n"))
+
+stadionok = []
+with open("vb2018.txt", "rt") as file:
+    lines = file.readlines()
+    for i in range(1, len(lines)):
+        stadionok.append(Stadion(lines[i]))
+
+
+# 3. feladat - hány stadion van
+print("3. feladat: {}".format(len(stadionok)))
+
+# 4. feladat a legkevesebb férőhellyel rendelkező stadion
+
+min = 0 # változó lérehozása, feltesszük, hogy ez a legnagyobb, vagy a legkisebb...
+for i in range(1, len(stadionok)):    #végigmegyünk a listán
+    if stadionok[i].ferohely < stadionok[min].ferohely:
+        min = i
+print("4. fealadat: A legkevesebb férőhely:")
+print("\t Helyezés: {}".format(stadionok[min].varos))
+print("\t Csapat: {}".format(stadionok[min].nev1))
+print("\t Pontszam: {}".format(stadionok[min].ferohely))
+
+# 5. átlagos férőhelyszám
+
+atlag = 0
+for r in stadionok:     # ha az összes érték, akkor mindig bejárós ciklus
+    atlag = atlag + r.ferohely # nincs egyéb feltétel, csak össze kell adni
+print("5. feladat: Átlagos férőhelyszám: {:.1f} pont". format(atlag / len(stadionok)))
+
+# 6. hány stadion rendelkezik alternativ névvel
+
+alternevDB = 0
+for Stadion in stadionok:
+    if Stadion.nev2 != "n.a.":
+        alternevDB = alternevDB + 1
+
+print("6. feladat: Két néven is ismert stadionok száma:", alternevDB);
+
+
+# 7. A város nevének bevitele
+
+print("7. feladat: Kérem a város nevét: ")
+
