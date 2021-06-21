@@ -1,0 +1,87 @@
+# FIFA-világranglista
+
+# 1. feladat: FIFAvilagranglista.py
+
+# 2. feladat:
+
+class Ranglista:                                        #osztály készítése
+    def __init__(self, line):                           #konstruktor
+        darabol = line.split(";")
+        self.csapat = darabol[0]                        #sting 0. indexen
+        self.helyezes = int(darabol[1])                 #szam 1. indexen
+        self.valtozas = int(darabol[2])                 #szam 2. indexen
+        self.pontszam = int(darabol[3].rstrip("\n"))    #szam 3. indexen
+
+
+ranglista_lista = []
+with open("fifa.txt", "rt") as file:
+    lines = file.readlines()
+    for i in range(1, len(lines)):
+        ranglista_lista.append(Ranglista(lines[i]))
+
+"""
+Ellenőrzés
+for r in ranglista_lista:             #r az objektum neve
+    print("{},{},{},{}".format(
+        r.csapat, r.helyezes, r.valtozas, r.pontszam
+    ))
+"""
+
+# 3. feladat
+
+print("3. feladat: A világrangistán {} csapat szerepel" .format(len(ranglista_lista)))
+print()
+
+# 4. feladat
+
+atlag = 0
+for r in ranglista_lista:     # ha az összes érték, akkor mindig bejárós ciklus
+    atlag = atlag + r.pontszam # nincs egyéb feltétel, csak össze kell adni
+print("4. feladat: A csapatok átlagos pontszáma: {:.2f} pont". format(atlag / len(ranglista_lista)))
+print()
+
+# 5. feladat
+
+max = 0 # változó lérehozása, feltesszük, hogy ez a legnagyobb, vagy a legkisebb...
+for i in range(1, len(ranglista_lista)):    #végigmegyünk a listán
+    if ranglista_lista[i].valtozas > ranglista_lista[max].valtozas:
+        max = i
+print("5. fealadat: A legtöbbet javító csapat:")
+print("\t Helyezés: {}".format(ranglista_lista[max].helyezes))
+print("\t Csapat: {}".format(ranglista_lista[max].csapat))
+print("\t Pontszam: {}".format(ranglista_lista[max].pontszam))
+print()
+
+# 6. feladat - Határozza meg, hogy a forrásállományban megtalálható-e Magyarország csapata!
+# két kimenetel lehet vagy igen, vagy nem?
+
+for r in ranglista_lista:
+    if r.csapat == "Magyarország":
+        print("6. fealadat: A csapatok között van Magyarország")
+        break
+else:
+    print("6. fealadat: A csapatok között nincs Magyarország")
+
+# 7. feladat
+
+print("7. feladat: Statisztika")
+valtozasok = []
+for r in ranglista_lista:
+    if r.valtozas not in valtozasok:
+        valtozasok.append(r.valtozas)
+
+valtozasokDB = []
+for i in range(len(valtozasok)):
+    db = 0
+    for r in ranglista_lista:
+        if valtozasok[i] == r.valtozas:
+            db = db + 1
+    valtozasokDB.append(db)
+
+for i in range(len(valtozasokDB)):
+    if valtozasokDB[i] > 1:
+        print("\t {} helyet változott {} csapat".format(
+            valtozasok[i],
+            valtozasokDB[i]))
+
+
