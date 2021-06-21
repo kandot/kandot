@@ -1,0 +1,58 @@
+# 1. feladat balkezesek fájlnév megadása
+
+# 2. feladat a balkezesek.txt beolvasása, tárolása
+
+class Baseball:
+    def __init__(self,line):
+        darabol = line.split(";")
+        self.jnev = darabol[0]
+        self.elsom = darabol[1]
+        self.utolsom = darabol[2]
+        self.jsuly = int(darabol[3])
+        self.jmagassag = int(darabol[4].rstrip("\n"))
+
+baseballosok = []
+with open("balkezesek.txt", "rt", encoding="utf-8") as file:
+   lines = file.readlines()
+   for i in range(1, len(lines)):
+       baseballosok.append(Baseball(lines[i]))
+
+# 3. feladat adatsorok megszámlálása
+
+print("3. feladat: {} ".format(len(baseballosok)))
+print()
+
+# 4. feladat utoljára 1999 októberében pályára lépő játékosok és a magasságuk
+
+print("4. feladat:")
+
+for i in range(1, len(baseballosok)):
+    if baseballosok[i].utolsom[:7] == '1999-10':
+        print("\t{} {:.1f}".format(baseballosok[i].jnev, baseballosok[i].jmagassag*2.54))
+print()
+
+# 5. feladat felhasználótól bekérini a helyes évszámot
+
+print("5. feladat:")
+
+while True:
+    evszam= int(input("Kérek egy 1990 és 1999 közötti évszámot!:"))
+    if (1989 < evszam < 2000):
+        break
+    else: print(f"Hibás adat!", end=" ")
+print()
+
+
+
+# 6. feladat az felhasználó által megadott évben pályára lépő játékosok átlagsúlya
+
+teljessuly = []
+
+for i in range(0, len(baseballosok)):
+    if (int(baseballosok[i].elsom[:4]) <= evszam <= int(baseballosok[i].utolsom[:4])):
+        teljessuly.append(baseballosok[i].jsuly)
+
+print("6. feladat: {:.2f}".format(sum(teljessuly) / len(teljessuly)))
+print()
+
+
